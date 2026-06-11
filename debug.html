@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debug</title>
+<style>
+body{font-family:monospace;font-size:14px;padding:16px;background:#000;color:#0f0;line-height:1.8;word-break:break-all}
+.label{color:#ff0}
+</style>
+</head>
+<body>
+<div id="out">Loading...</div>
+<script>
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbxNVrLMZg-CMQj5wAPEwEZRfp8ehC7eO9-Q6bjB9sQ8cg43va7ZVgRZ9Ig_FnEhrs7h/exec';
+var out=document.getElementById('out');
+var lines=[];
+
+function log(label, val){
+  lines.push('<span class="label">'+label+':</span> '+val);
+  out.innerHTML=lines.join('<br><br>');
+}
+
+async function run(){
+  log('SCRIPT_URL', SCRIPT_URL);
+
+  // Test 1: GET request
+  try{
+    var r1=await fetch(SCRIPT_URL);
+    var t1=await r1.text();
+    log('GET status', r1.status);
+    log('GET response', t1.substring(0,300));
+  }catch(e){
+    log('GET error', e.toString());
+  }
+
+  // Test 2: POST check_password with "keetafwc202606"
+  try{
+    var r2=await fetch(SCRIPT_URL,{
+      method:'POST',
+      body:JSON.stringify({action:'check_password',password:'keetafwc202606'}),
+      headers:{'Content-Type':'text/plain'}
+    });
+    var t2=await r2.text();
+    log('POST status', r2.status);
+    log('POST response', t2.substring(0,500));
+  }catch(e){
+    log('POST error', e.toString());
+  }
+
+  // Test 3: POST get_inventory
+  try{
+    var r3=await fetch(SCRIPT_URL,{
+      method:'POST',
+      body:JSON.stringify({action:'get_inventory'}),
+      headers:{'Content-Type':'text/plain'}
+    });
+    var t3=await r3.text();
+    log('Inventory status', r3.status);
+    log('Inventory response', t3.substring(0,500));
+  }catch(e){
+    log('Inventory error', e.toString());
+  }
+}
+run();
+</script>
+</body>
+</html>
