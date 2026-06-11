@@ -201,7 +201,7 @@ async function checkPassword(){
     var res=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'check_password',password:pw}),headers:{'Content-Type':'text/plain'}});
     var data=await res.json();
     if(data.success && data.valid){
-      sessionStorage.setItem('staffAuth','1');
+      localStorage.setItem('staffAuth','1');
       document.getElementById('gate').style.display='none';
       document.getElementById('main').classList.add('show');
       loadInventory();
@@ -336,7 +336,7 @@ async function redeem(){
   checkAllConditions();
 }
 
-if(sessionStorage.getItem('staffAuth')==='1'){
+if(localStorage.getItem('staffAuth')==='1'){
   document.getElementById('gate').style.display='none';
   document.getElementById('main').classList.add('show');
   loadInventory();
